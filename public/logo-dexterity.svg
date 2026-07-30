@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 72" role="img" aria-label="Dexterity Solutions">
+  <g>
+    <path d="M34 34 L34 4 A30 30 0 0 0 4 34 Z" fill="#3d3d3d"/>
+    <path d="M38 34 L38 4 A30 30 0 0 1 68 34 Z" fill="#009994"/>
+    <path d="M34 38 L34 68 A30 30 0 0 1 4 38 Z" fill="#3d3d3d"/>
+    <path d="M38 38 L38 68 A30 30 0 0 0 68 38 Z" fill="#3d3d3d"/>
+  </g>
+  <text x="82" y="44" font-family="'Proxima Soft ExCn','Proxima Soft','Arial Narrow','Roboto Condensed',Arial,sans-serif" font-size="36" font-weight="700" letter-spacing="0.5" fill="#3d3d3d">DEXTER<tspan fill="#009994">IT</tspan>Y</text>
+  <text x="84" y="65" font-family="'Boston','Proxima Soft','Segoe UI',Arial,sans-serif" font-size="13" font-weight="400" letter-spacing="6.5" fill="#3d3d3d">SOLUTIONS</text>
+</svg>

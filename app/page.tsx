@@ -190,6 +190,14 @@ export default function Pagina() {
 
   return (
     <>
+      <div className="barra-topo">
+        <div className="container barra-topo-conteudo">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-dexterity.svg" alt="Dexterity Solutions" className="logo-dexterity" />
+          <span className="rotulo-ferramenta">Dados de Mercado</span>
+        </div>
+      </div>
+
       <header className="topo">
         <div className="container">
           <h1>Cotações de Derivativos — B3</h1>
@@ -406,9 +414,14 @@ export default function Pagina() {
       </main>
 
       <footer className="rodape">
-        <div className="container">
-          Aplicativo não oficial. Dados públicos da B3 (Pesquisa por Pregão) — confira sempre as
-          fontes oficiais antes de decisões de investimento.
+        <div className="container rodape-conteudo">
+          <div className="marca-rodape">
+            DEXTER<span>IT</span>Y<small>SOLUTIONS</small>
+          </div>
+          <p>
+            Aplicativo não oficial. Dados públicos da B3 (Pesquisa por Pregão) — confira sempre as
+            fontes oficiais antes de decisões de investimento.
+          </p>
         </div>
       </footer>
     </>
