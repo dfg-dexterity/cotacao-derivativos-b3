@@ -193,7 +193,7 @@ export default function Pagina() {
       <div className="barra-topo">
         <div className="container barra-topo-conteudo">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-dexterity.svg" alt="Dexterity Solutions" className="logo-dexterity" />
+          <img src="/logo-dexterity.png" alt="Dexterity Solutions" className="logo-dexterity" />
           <span className="rotulo-ferramenta">Dados de Mercado</span>
         </div>
       </div>
