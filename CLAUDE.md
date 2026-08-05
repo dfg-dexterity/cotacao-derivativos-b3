@@ -46,8 +46,10 @@ rodapé grafite com a marca.
 ## Infra
 
 - Repositório GitHub: `dfg-dexterity/cotacao-derivativos-b3` (branch `main`).
-- Vercel (time `dexterityit`): projeto ativo **`dados-de-mercado-b3`**
-  (https://dados-de-mercado-b3-dexterityit.vercel.app). O projeto antigo
-  `cotacao-derivativos-b3` ficou obsoleto (integração sem permissão de novos
-  deploys em projeto existente) — preferir conectar o repositório ao projeto no
-  painel do Vercel para deploy automático a cada push.
+- Vercel (time `dexterityit`): projeto ativo **`mercado-b3`**
+  (https://mercado-b3-dexterityit.vercel.app). Os projetos `cotacao-derivativos-b3`
+  e `dados-de-mercado-b3` ficaram obsoletos e podem ser apagados no painel.
+- **Limitação da integração Vercel MCP**: só consegue publicar ao CRIAR um projeto
+  novo; qualquer deploy em projeto existente retorna 403. Fix definitivo: conectar
+  o repositório GitHub ao projeto no painel do Vercel (Settings → Git) para deploy
+  automático a cada push na `main`.
