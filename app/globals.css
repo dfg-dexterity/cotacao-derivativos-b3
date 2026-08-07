@@ -544,6 +544,48 @@ tbody tr:hover {
   max-width: 720px;
 }
 
+/* ===== Modo de incorporação (?embed=1) =====
+   Layout enxuto para caber dentro de um iframe do Odoo/Notion: sem faixa de
+   título nem rodapé, margens menores e tabela ocupando a altura disponível. */
+body.modo-embutido {
+  background: #ffffff;
+  min-height: 0;
+}
+
+body.modo-embutido .container {
+  max-width: none;
+  padding: 0 12px;
+}
+
+body.modo-embutido .barra-topo-conteudo {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+body.modo-embutido .logo-dexterity {
+  height: 30px;
+}
+
+body.modo-embutido .rotulo-ferramenta {
+  color: var(--grafite-claro);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+body.modo-embutido main.container {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+body.modo-embutido .cartao {
+  margin-bottom: 12px;
+  box-shadow: none;
+}
+
+body.modo-embutido .tabela-rolagem {
+  max-height: calc(100vh - 165px);
+}
+
 /* ===== Responsivo ===== */
 @media (max-width: 960px) {
   .formulario {

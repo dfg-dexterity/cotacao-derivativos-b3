@@ -7,6 +7,23 @@ parseia o XML BVBG (`PricRpt`) e exibe todas as cotações dos contratos futuros
 - API: `GET /api/cotacoes?data=AAAA-MM-DD[&tipo=SPRD&prefixos=DI1,DOL&somente6=1&formato=csv]`
 - Testes do parser (sem rede): `npm run testar` · Build: `npm run build`
 
+## Incorporação em iframe (Odoo, Notion, intranet)
+
+`next.config.mjs` envia `Content-Security-Policy: frame-ancestors *` — sem isso o
+navegador recusa o embed. Para restringir a um domínio, troque o `*` pelo host.
+
+A página aceita parâmetros de URL (lidos no cliente, em `app/page.tsx`):
+
+| Parâmetro   | Efeito                                                             |
+| ----------- | ------------------------------------------------------------------ |
+| `embed=1`   | Modo compacto: sem faixa de título e sem rodapé, e já busca sozinho |
+| `filtros=0` | Esconde o formulário (só a tabela — bom para painel)                |
+| `auto=1`    | Busca no carregamento sem entrar no modo compacto                   |
+| `data`      | `AAAA-MM-DD`; padrão = último dia útil                              |
+| `tipo`      | `SPRD` (padrão) ou `PR`                                             |
+| `prefixos`  | Lista separada por vírgula, ex. `DI1,DOL`                           |
+| `somente6=1`| Só tickers de 6 caracteres                                          |
+
 ## 🎨 Identidade visual Dexterity — SEMPRE USAR (pedido do usuário em 2026-07-30)
 
 **Toda interface, página ou material criado neste projeto deve usar a logo e a

@@ -58,9 +58,43 @@ export default function Pagina() {
   const [ordenacao, setOrdenacao] = useState<{ coluna: ChaveColuna; direcao: 1 | -1 } | null>(null);
   const [pagina, setPagina] = useState(1);
 
-  // Definida no cliente para evitar divergência de fuso na hidratação.
+  // Modo de incorporação (iframe no Odoo, Notion, intranet): layout compacto,
+  // sem faixa de título nem rodapé, com a consulta já disparada no carregamento.
+  const [embutido, setEmbutido] = useState(false);
+  const [mostrarFiltros, setMostrarFiltros] = useState(true);
+
+  // Lido no cliente: evita divergência de fuso e de query string na hidratação.
   useEffect(() => {
-    setDataPregao((atual) => atual || ultimaDataUtil());
+    const parametros = new URLSearchParams(window.location.search);
+    const modoEmbutido = parametros.get('embed') === '1';
+    const tipoUrl = (parametros.get('tipo') ?? '').toUpperCase();
+    const dataUrl = parametros.get('data') ?? '';
+    const prefixosUrl = (parametros.get('prefixos') ?? '')
+      .split(',')
+      .map((prefixo) => prefixo.trim().toUpperCase())
+      .filter(Boolean);
+    const somenteSeisUrl = parametros.get('somente6') === '1';
+    const dataEscolhida = /^\d{4}-\d{2}-\d{2}$/.test(dataUrl) ? dataUrl : ultimaDataUtil();
+    const tipoEscolhido = tipoUrl === 'PR' || tipoUrl === 'SPRD' ? tipoUrl : 'SPRD';
+
+    setEmbutido(modoEmbutido);
+    setMostrarFiltros(parametros.get('filtros') !== '0');
+    setDataPregao(dataEscolhida);
+    setTipo(tipoEscolhido);
+    if (prefixosUrl.length > 0) setPrefixos(prefixosUrl.join(', '));
+    setSomenteSeis(somenteSeisUrl);
+    document.body.classList.toggle('modo-embutido', modoEmbutido);
+
+    if (modoEmbutido || parametros.get('auto') === '1') {
+      void executarBusca({
+        data: dataEscolhida,
+        tipo: tipoEscolhido,
+        prefixos: prefixosUrl,
+        somenteSeis: somenteSeisUrl,
+      });
+    }
+    // Executa uma única vez, na montagem.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const prefixosAtivos = useMemo(
@@ -79,18 +113,22 @@ export default function Pagina() {
     setPrefixos(novos.join(', '));
   }
 
-  async function buscar(evento?: FormEvent) {
-    evento?.preventDefault();
-    if (!dataPregao) {
+  async function executarBusca(opcoes: {
+    data: string;
+    tipo: string;
+    prefixos: string[];
+    somenteSeis: boolean;
+  }) {
+    if (!opcoes.data) {
       setErro('Escolha a data do pregão.');
       return;
     }
     setCarregando(true);
     setErro(null);
     try {
-      const parametros = new URLSearchParams({ data: dataPregao, tipo });
-      if (prefixosAtivos.length > 0) parametros.set('prefixos', prefixosAtivos.join(','));
-      if (somenteSeis) parametros.set('somente6', '1');
+      const parametros = new URLSearchParams({ data: opcoes.data, tipo: opcoes.tipo });
+      if (opcoes.prefixos.length > 0) parametros.set('prefixos', opcoes.prefixos.join(','));
+      if (opcoes.somenteSeis) parametros.set('somente6', '1');
 
       const resposta = await fetch(`/api/cotacoes?${parametros.toString()}`);
       const corpo = await resposta.json();
@@ -106,6 +144,16 @@ export default function Pagina() {
     } finally {
       setCarregando(false);
     }
+  }
+
+  function buscar(evento?: FormEvent) {
+    evento?.preventDefault();
+    void executarBusca({
+      data: dataPregao,
+      tipo,
+      prefixos: prefixosAtivos,
+      somenteSeis,
+    });
   }
 
   const linhas = useMemo(() => {
@@ -194,21 +242,26 @@ export default function Pagina() {
         <div className="container barra-topo-conteudo">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo-dexterity.png" alt="Dexterity Solutions" className="logo-dexterity" />
-          <span className="rotulo-ferramenta">Dados de Mercado</span>
+          <span className="rotulo-ferramenta">
+            {embutido ? 'Cotações de Derivativos — B3' : 'Dados de Mercado'}
+          </span>
         </div>
       </div>
 
-      <header className="topo">
-        <div className="container">
-          <h1>Cotações de Derivativos — B3</h1>
-          <p>
-            Ajustes e cotações dos contratos futuros, direto dos arquivos oficiais da{' '}
-            <strong>Pesquisa por Pregão</strong> da B3.
-          </p>
-        </div>
-      </header>
+      {!embutido && (
+        <header className="topo">
+          <div className="container">
+            <h1>Cotações de Derivativos — B3</h1>
+            <p>
+              Ajustes e cotações dos contratos futuros, direto dos arquivos oficiais da{' '}
+              <strong>Pesquisa por Pregão</strong> da B3.
+            </p>
+          </div>
+        </header>
+      )}
 
       <main className="container">
+        {mostrarFiltros && (
         <section className="cartao">
           <form onSubmit={buscar} className="formulario">
             <div className="campo">
@@ -274,6 +327,7 @@ export default function Pagina() {
             do pregão.
           </p>
         </section>
+        )}
 
         {carregando && (
           <section className="cartao aviso-carregando">
@@ -413,17 +467,19 @@ export default function Pagina() {
         )}
       </main>
 
-      <footer className="rodape">
-        <div className="container rodape-conteudo">
-          <div className="marca-rodape">
-            DEXTER<span>IT</span>Y<small>SOLUTIONS</small>
+      {!embutido && (
+        <footer className="rodape">
+          <div className="container rodape-conteudo">
+            <div className="marca-rodape">
+              DEXTER<span>IT</span>Y<small>SOLUTIONS</small>
+            </div>
+            <p>
+              Aplicativo não oficial. Dados públicos da B3 (Pesquisa por Pregão) — confira sempre as
+              fontes oficiais antes de decisões de investimento.
+            </p>
           </div>
-          <p>
-            Aplicativo não oficial. Dados públicos da B3 (Pesquisa por Pregão) — confira sempre as
-            fontes oficiais antes de decisões de investimento.
-          </p>
-        </div>
-      </footer>
+        </footer>
+      )}
     </>
   );
 }
