@@ -1,0 +1,26 @@
+{
+  "name": "cotacao-derivativos-b3",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Consulta de cotações e ajustes dos contratos futuros da B3 (Pesquisa por Pregão)",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "testar": "tsx scripts/testar-parser.ts"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.3",
+    "fflate": "^0.8.2",
+    "next": "^15.5.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0"
+  }
+}
