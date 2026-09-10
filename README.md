@@ -86,6 +86,27 @@ Resposta JSON:
 }
 ```
 
+## Identidade visual
+
+A interface segue o tema escuro do site da Dexterity (dexterityit.com.br): fundo
+grafite, cerceta como cor de ação, Barlow Condensed nos títulos, Figtree no corpo
+e IBM Plex Mono nos rótulos e nas colunas numéricas.
+
+- `app/dexterity.css` — a folha da marca, portátil e independente deste app.
+- `app/globals.css` — só o que é específico desta ferramenta.
+- `app/componentes/MarcaDexterity.tsx` — o lockup oficial em SVG.
+
+O tema está empacotado como skill do Claude Code em
+`.claude/skills/estilo-web-dexterity/`, para aplicar a mesma identidade em outros
+projetos:
+
+```bash
+.claude/skills/estilo-web-dexterity/scripts/instalar.sh              # para o usuário
+.claude/skills/estilo-web-dexterity/scripts/instalar.sh /outro/repo  # para outro projeto
+```
+
+`npm run testar` avisa se a cópia do skill divergir de `app/dexterity.css`.
+
 ## Limitações e observações
 
 - A B3 publica os arquivos **apenas em dias úteis**, normalmente após o fechamento do pregão. Para datas sem arquivo a API responde `404` com mensagem explicativa.

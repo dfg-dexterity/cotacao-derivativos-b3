@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { MarcaDexterity } from './componentes/MarcaDexterity';
 import {
   COLUNAS,
   PREFIXOS_SUGERIDOS,
@@ -37,6 +38,11 @@ function ultimaDataUtil(): string {
   const mes = String(data.getMonth() + 1).padStart(2, '0');
   const dia = String(data.getDate()).padStart(2, '0');
   return `${ano}-${mes}-${dia}`;
+}
+
+/** Texto e data alinham à esquerda; todo o resto é número e alinha à direita. */
+function ehNumerica(coluna: Coluna): boolean {
+  return coluna.tipo !== 'texto' && coluna.tipo !== 'data';
 }
 
 function formatarData(iso: string): string {
@@ -209,7 +215,7 @@ export default function Pagina() {
   function renderizarValor(cotacao: Cotacao, coluna: Coluna) {
     const valor = cotacao[coluna.chave];
     if (valor === null || valor === undefined || valor === '') {
-      return <span className="vazio">—</span>;
+      return <span className="dx-vazio">—</span>;
     }
     switch (coluna.tipo) {
       case 'data':
@@ -220,7 +226,7 @@ export default function Pagina() {
         const numero = Number(valor);
         const texto = formatadorPreco.format(numero);
         if (coluna.chave === 'adjusted_quote_change_pct') {
-          const classe = numero > 0 ? 'positivo' : numero < 0 ? 'negativo' : '';
+          const classe = numero > 0 ? 'dx-up' : numero < 0 ? 'dx-down' : '';
           return <span className={classe}>{texto}</span>;
         }
         return texto;
@@ -238,10 +244,11 @@ export default function Pagina() {
 
   return (
     <>
-      <div className="barra-topo">
-        <div className="container barra-topo-conteudo">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-dexterity.png" alt="Dexterity Solutions" className="logo-dexterity" />
+      <div className="barra-topo dx-nav">
+        <div className="container barra-topo__in">
+          <a className="dx-brand" href="/" aria-label="Dexterity IT Solutions">
+            <MarcaDexterity />
+          </a>
           <span className="rotulo-ferramenta">
             {embutido ? 'Cotações de Derivativos — B3' : 'Dados de Mercado'}
           </span>
@@ -251,6 +258,7 @@ export default function Pagina() {
       {!embutido && (
         <header className="topo">
           <div className="container">
+            <span className="dx-eyebrow">Ferramenta aberta · Dados de mercado</span>
             <h1>Cotações de Derivativos — B3</h1>
             <p>
               Ajustes e cotações dos contratos futuros, direto dos arquivos oficiais da{' '}
@@ -264,7 +272,7 @@ export default function Pagina() {
         {mostrarFiltros && (
         <section className="cartao">
           <form onSubmit={buscar} className="formulario">
-            <div className="campo">
+            <div className="dx-field">
               <label htmlFor="data">Data do pregão</label>
               <input
                 id="data"
@@ -275,7 +283,7 @@ export default function Pagina() {
               />
             </div>
 
-            <div className="campo">
+            <div className="dx-field">
               <label htmlFor="tipo">Arquivo</label>
               <select id="tipo" value={tipo} onChange={(evento) => setTipo(evento.target.value)}>
                 <option value="SPRD">SPRD — Derivativos (ajustes do pregão)</option>
@@ -283,7 +291,7 @@ export default function Pagina() {
               </select>
             </div>
 
-            <div className="campo campo-prefixos">
+            <div className="dx-field campo-prefixos">
               <label htmlFor="prefixos">Prefixos de ticker (vazio = todas as cotações)</label>
               <input
                 id="prefixos"
@@ -294,19 +302,20 @@ export default function Pagina() {
               />
             </div>
 
-            <div className="campo campo-acao">
-              <button type="submit" disabled={carregando}>
+            <div className="campo-acao">
+              <button type="submit" className="dx-btn" disabled={carregando}>
                 {carregando ? 'Consultando…' : 'Buscar cotações'}
               </button>
             </div>
           </form>
 
-          <div className="chips" role="group" aria-label="Atalhos de prefixo">
+          <div className="filtros-rapidos" role="group" aria-label="Atalhos de prefixo">
             {PREFIXOS_SUGERIDOS.map((prefixo) => (
               <button
                 key={prefixo}
                 type="button"
-                className={`chip ${prefixosAtivos.includes(prefixo) ? 'ativo' : ''}`}
+                className="dx-chip"
+                aria-pressed={prefixosAtivos.includes(prefixo)}
                 onClick={() => alternarPrefixo(prefixo)}
               >
                 {prefixo}
@@ -331,23 +340,23 @@ export default function Pagina() {
 
         {carregando && (
           <section className="cartao aviso-carregando">
-            <span className="girador" aria-hidden="true" />
+            <span className="dx-girador" aria-hidden="true" />
             Baixando e processando o arquivo da B3 — isso pode levar até um minuto…
           </section>
         )}
 
         {erro && !carregando && (
-          <section className="cartao alerta-erro" role="alert">
+          <section className="cartao alerta-erro dx-erro" role="alert">
             <strong>Não foi possível concluir a consulta.</strong>
             <span>{erro}</span>
           </section>
         )}
 
         {resultado && !carregando && (
-          <section className="cartao resultados">
+          <section className="cartao cartao--liso">
             <div className="barra-resultados">
               <div className="resumo">
-                <strong>{formatadorInteiro.format(resultado.total)}</strong> cotações
+                <b>{formatadorInteiro.format(resultado.total)}</b> cotações
                 {resultado.total !== resultado.total_no_arquivo && (
                   <>
                     {' '}
@@ -368,7 +377,12 @@ export default function Pagina() {
                   }}
                   aria-label="Filtrar por ticker"
                 />
-                <button type="button" onClick={baixarCsv} disabled={linhas.length === 0}>
+                <button
+                  type="button"
+                  className="dx-btn dx-btn--sm"
+                  onClick={baixarCsv}
+                  disabled={linhas.length === 0}
+                >
                   Baixar CSV
                 </button>
                 {urlJson && (
@@ -384,19 +398,28 @@ export default function Pagina() {
             ) : (
               <>
                 <div className="tabela-rolagem">
-                  <table>
+                  <table className="dx-tabela">
                     <thead>
                       <tr>
                         {COLUNAS.map((coluna) => (
                           <th
                             key={coluna.chave}
-                            className={coluna.tipo === 'texto' || coluna.tipo === 'data' ? '' : 'numerica'}
+                            className={ehNumerica(coluna) ? 'dx-num' : undefined}
+                            aria-sort={
+                              ordenacao?.coluna === coluna.chave
+                                ? ordenacao.direcao === 1
+                                  ? 'ascending'
+                                  : 'descending'
+                                : 'none'
+                            }
                             onClick={() => ordenarPor(coluna.chave)}
                             title="Clique para ordenar"
                           >
                             {coluna.rotulo}
                             {ordenacao?.coluna === coluna.chave && (
-                              <span className="seta">{ordenacao.direcao === 1 ? ' ▲' : ' ▼'}</span>
+                              <span className="seta-ordenacao">
+                                {ordenacao.direcao === 1 ? ' ▲' : ' ▼'}
+                              </span>
                             )}
                           </th>
                         ))}
@@ -406,12 +429,7 @@ export default function Pagina() {
                       {linhasDaPagina.map((cotacao, indice) => (
                         <tr key={`${cotacao.ticker}-${cotacao.instrument_id}-${indice}`}>
                           {COLUNAS.map((coluna) => (
-                            <td
-                              key={coluna.chave}
-                              className={
-                                coluna.tipo === 'texto' || coluna.tipo === 'data' ? '' : 'numerica'
-                              }
-                            >
+                            <td key={coluna.chave} className={ehNumerica(coluna) ? 'dx-num' : undefined}>
                               {renderizarValor(cotacao, coluna)}
                             </td>
                           ))}
@@ -469,10 +487,10 @@ export default function Pagina() {
 
       {!embutido && (
         <footer className="rodape">
-          <div className="container rodape-conteudo">
-            <div className="marca-rodape">
-              DEXTER<span>IT</span>Y<small>SOLUTIONS</small>
-            </div>
+          <div className="container dx-foot">
+            <a className="dx-brand" href="https://www.dexterityit.com.br" aria-label="Dexterity IT Solutions">
+              <MarcaDexterity />
+            </a>
             <p>
               Aplicativo não oficial. Dados públicos da B3 (Pesquisa por Pregão) — confira sempre as
               fontes oficiais antes de decisões de investimento.

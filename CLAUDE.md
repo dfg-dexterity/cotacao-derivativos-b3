@@ -27,38 +27,70 @@ A página aceita parâmetros de URL (lidos no cliente, em `app/page.tsx`):
 ## 🎨 Identidade visual Dexterity — SEMPRE USAR (pedido do usuário em 2026-07-30)
 
 **Toda interface, página ou material criado neste projeto deve usar a logo e a
-identidade visual da Dexterity.** Os ativos oficiais estão versionados em `brand/`:
+identidade visual da Dexterity.**
 
-| Arquivo                              | Uso                                              |
-| ------------------------------------ | ------------------------------------------------ |
-| `brand/logo-dexterity-horizontal.png`| Logo oficial completo (2342×626, fundo branco). Versão **limpa** — o original da skill `documento-dexterity` tem um cursor de mouse capturado sobre o "T", já removido aqui. |
-| `brand/logo-dexterity.svg`           | Recriação vetorial aproximada (símbolo + texto) para usos que exijam SVG. |
-| `public/logo-dexterity.png`          | Versão web do logo (504×128) usada no cabeçalho do app. |
-| `app/icon.png`                       | Favicon com o símbolo oficial (4 pétalas).       |
+Desde 2026-09-10 o app segue o **tema escuro do site institucional**
+(dexterityit.com.br), e não mais a paleta clara sobre creme. A folha da marca
+mora em `app/dexterity.css` e é a fonte única de cor, tipografia e componente —
+`app/globals.css` só trata do que é específico desta ferramenta.
 
-Fonte primária dos ativos da marca (entre sessões/projetos): skill
-`documento-dexterity` em `assets/brand/` (logo, banner de capa, decoração).
+### Skill `estilo-web-dexterity`
 
-### Paleta oficial
+O tema está empacotado em `.claude/skills/estilo-web-dexterity/`, para aplicar a
+mesma identidade em outros programas. Contém a folha CSS, os SVGs da marca, as
+receitas de componente (`references/componentes.md`) e a checagem final
+(`references/checklist.md`). Para usar em outro projeto:
 
-| Cor            | Hex       | Uso                                        |
-| -------------- | --------- | ------------------------------------------ |
-| Teal (primária)| `#009994` | Destaques, botões, links, filetes, "IT" do logo |
-| Teal escuro    | `#007D79` | Hover de botões/links                      |
-| Grafite        | `#3D3D3D` | Faixas de título, rodapé, texto do logo    |
-| Grafite claro  | `#4D4D4D` | Cabeçalhos de tabela (texto branco)        |
-| Creme          | `#F7F3E7` | Fundo de página                            |
-| Cinza          | `#CCCCCC` | Bordas/divisores                           |
+```bash
+.claude/skills/estilo-web-dexterity/scripts/instalar.sh              # ~/.claude/skills
+.claude/skills/estilo-web-dexterity/scripts/instalar.sh /outro/repo  # .claude/skills de lá
+```
+
+`assets/dexterity.css` do skill precisa ser idêntico a `app/dexterity.css`.
+`npm run testar` verifica isso; se acusar divergência, `cp app/dexterity.css
+.claude/skills/estilo-web-dexterity/assets/dexterity.css`.
+
+### Paleta oficial (tema escuro)
+
+| Token                | Hex                     | Uso                                |
+| -------------------- | ----------------------- | ---------------------------------- |
+| `--dx-base`          | `#1B1B1B`               | Fundo da página                    |
+| `--dx-surface`       | `#242424`               | Cartões e painéis                  |
+| `--dx-surface-2`     | `#2E2E2E`               | Cabeçalho de painel e de tabela    |
+| `--dx-surface-3`     | `#1F1F1F`               | Fundo de campo                     |
+| `--dx-line`          | `rgba(247,243,231,.13)` | Filetes (a "grade" da marca)       |
+| `--dx-cerceta`       | `#009994`               | Ação: botão, borda, filete         |
+| `--dx-cerceta-texto` | `#00B3AC`               | Cerceta **em texto** (contraste AA)|
+| `--dx-amarelo`       | `#FFA436`               | Foco, alerta, baixa                |
+| `--dx-off`           | `#F7F3E7`               | Texto principal                    |
+| `--dx-rotulo`        | `#908C85`               | Rótulo mono                        |
+| `--dx-roxo`/`--dx-musgo` | `#98569A`/`#597C59` | Acento de categoria                |
+
+Cantos vivos em tudo (`border-radius: 0`), separação por filete de 1px em vez de
+sombra, e alta/baixa seguem o ticker do site: cerceta sobe, âmbar cai.
 
 ### Tipografia
 
-- Títulos: **Proxima Soft ExCn** (fallbacks: Proxima Soft, Arial Narrow, Roboto Condensed)
-- Corpo: **Boston** (fallbacks: Segoe UI/system)
-- Títulos em caixa alta condensada dão a cara da marca (como no logo DEXTERITY).
+- Títulos: **Barlow Condensed** 600, caixa alta, `line-height: .92`
+- Corpo: **Figtree** 300, 17px
+- Rótulos técnicos: **IBM Plex Mono** 11px, caixa alta, `letter-spacing: .13em`
 
-Padrões de componente já aplicados em `app/globals.css`: tabela com cabeçalho
-grafite + filete teal, cartões brancos sobre fundo creme, chips arredondados,
-rodapé grafite com a marca.
+Carregadas por `<link>` em `app/layout.tsx` (e não por `next/font`) para que
+`dexterity.css` continue colável em projetos sem build, como o site em Odoo.
+
+### Ativos da marca
+
+| Arquivo                                   | Uso                                          |
+| ----------------------------------------- | -------------------------------------------- |
+| `app/componentes/MarcaDexterity.tsx`      | Lockup oficial em SVG inline — **use este** no app; as pétalas herdam as cores do tema e animam no hover. |
+| `brand/logo-dexterity-lockup-escuro.svg`  | O mesmo lockup, autocontido, para uso fora do React. |
+| `brand/simbolo-dexterity.svg`             | Só o símbolo de 4 pétalas.                   |
+| `brand/logo-dexterity-horizontal.png`     | Logo oficial completo (2342×626, fundo branco) — **não serve no tema escuro**. |
+| `public/logo-dexterity.png`               | Versão web antiga (fundo branco); mantida para materiais em fundo claro. |
+| `app/icon.png`                            | Favicon com o símbolo oficial.               |
+
+Fonte primária dos ativos entre sessões/projetos: skill `documento-dexterity`
+(`assets/brand/`) para material impresso, e este skill para web.
 
 ## Infra
 
