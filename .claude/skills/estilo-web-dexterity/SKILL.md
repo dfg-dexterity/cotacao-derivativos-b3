@@ -121,18 +121,19 @@ atalho `padding` zerando a margem lateral.
 - **Rótulo técnico** — IBM Plex Mono 11px, `letter-spacing: .13em–.18em`, CAIXA ALTA.
   É a assinatura da marca: rótulo de campo, cabeçalho de tabela, metadado, tag.
 
-## Usar em outros projetos
+## Onde ficam os arquivos
 
-O skill vive em `.claude/skills/estilo-web-dexterity/` deste repositório. Para
-deixá-lo disponível em qualquer projeto da máquina:
+Todos os caminhos citados aqui são relativos à pasta deste skill:
 
-```bash
-.claude/skills/estilo-web-dexterity/scripts/instalar.sh
-```
-
-O script copia a pasta para `~/.claude/skills/`. Alternativa: copiar a pasta para
-o `.claude/skills/` do outro projeto, ou subir no claude.ai para sincronizar
-entre sessões.
+| Arquivo                         | O que é                                          |
+| ------------------------------- | ------------------------------------------------ |
+| `assets/dexterity.css`          | A folha da marca. É o arquivo que se copia para o projeto. |
+| `assets/fontes.html`            | As tags `<link>` das três fontes.                |
+| `assets/marca-lockup.svg`       | Lockup oficial (símbolo + nome), para o cabeçalho e o rodapé. |
+| `assets/marca-simbolo.svg`      | Só o símbolo de 4 pétalas, para favicon e usos pequenos. |
+| `references/componentes.md`     | HTML de cada primitiva, e o caminho para Tailwind e frameworks de componente. |
+| `references/checklist.md`       | A checagem final, com os comandos prontos.       |
+| `scripts/instalar.sh`           | Copia este skill para `~/.claude/skills` ou para outro repositório (só faz sentido no Claude Code, com acesso a arquivos). |
 
 ## Referência de origem
 
