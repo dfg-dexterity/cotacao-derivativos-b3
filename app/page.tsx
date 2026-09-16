@@ -10,6 +10,8 @@ import {
   type Cotacao,
 } from '../lib/tipos';
 
+import { DexterityLogo } from './DexterityLogo';
+
 interface RespostaApi {
   arquivo: string;
   data: string;
@@ -240,8 +242,12 @@ export default function Pagina() {
     <>
       <div className="barra-topo">
         <div className="container barra-topo-conteudo">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-dexterity.png" alt="Dexterity Solutions" className="logo-dexterity" />
+          <a
+            href="https://www.dexterityit.com.br"
+            aria-label="Dexterity IT Solutions — ir para o site"
+          >
+            <DexterityLogo className="logo-dexterity" />
+          </a>
           <span className="rotulo-ferramenta">
             {embutido ? 'Cotações de Derivativos — B3' : 'Dados de Mercado'}
           </span>

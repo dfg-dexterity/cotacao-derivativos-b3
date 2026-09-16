@@ -39,26 +39,44 @@ identidade visual da Dexterity.** Os ativos oficiais estão versionados em `bran
 Fonte primária dos ativos da marca (entre sessões/projetos): skill
 `documento-dexterity` em `assets/brand/` (logo, banner de capa, decoração).
 
-### Paleta oficial
+### Paleta oficial (tema escuro)
 
-| Cor            | Hex       | Uso                                        |
-| -------------- | --------- | ------------------------------------------ |
-| Teal (primária)| `#009994` | Destaques, botões, links, filetes, "IT" do logo |
-| Teal escuro    | `#007D79` | Hover de botões/links                      |
-| Grafite        | `#3D3D3D` | Faixas de título, rodapé, texto do logo    |
-| Grafite claro  | `#4D4D4D` | Cabeçalhos de tabela (texto branco)        |
-| Creme          | `#F7F3E7` | Fundo de página                            |
-| Cinza          | `#CCCCCC` | Bordas/divisores                           |
+Mesmo sistema visual da Calculadora CDI/CDB e das demais ferramentas de Dados de
+Mercado. O tema é **escuro único** — não existe variante clara.
+
+| Cor             | Hex       | Uso                                             |
+| --------------- | --------- | ----------------------------------------------- |
+| Base            | `#1B1B1B` | Fundo de página                                 |
+| Superfície      | `#242424` | Cartões                                         |
+| Superfície 2    | `#2E2E2E` | Cabeçalho de tabela, realce de hover            |
+| Off-white       | `#F7F3E7` | Texto principal, letras do logo                 |
+| Cerceta         | `#009994` | Botões, preenchimentos, "IT" do logo            |
+| Cerceta destaque| `#00B3AC` | Texto de acento, links, sobrancelhas, alta      |
+| Âmbar           | `#FFA436` | Baixa/atenção e anel de foco                    |
+| Roxo            | `#98569A` | Nota informativa, crosshair de gráfico          |
+| Musgo           | `#597C59` | Série auxiliar de gráfico                       |
+| Vermelho        | `#D9563E` | **Só** erro e dedução                           |
+| Fio             | `rgba(247,243,231,.13)` | Bordas e divisores                |
+| Rótulo          | `#908C85` | Texto de apoio, rótulos em mono                 |
+
+**Cor tem sentido:** cerceta = alta/ganho, âmbar = baixa/atenção. Variação negativa
+vai em âmbar, **não** em vermelho — o vermelho fica reservado a erro.
 
 ### Tipografia
 
-- Títulos: **Proxima Soft ExCn** (fallbacks: Proxima Soft, Arial Narrow, Roboto Condensed)
-- Corpo: **Boston** (fallbacks: Segoe UI/system)
-- Títulos em caixa alta condensada dão a cara da marca (como no logo DEXTERITY).
+- Títulos: **Barlow Condensed** 600, caixa alta (equivalente web da Proxima Soft ExCn)
+- Corpo: **Figtree** 300 (equivalente web da Boston)
+- Rótulos e números: **IBM Plex Mono** 400/500, com `tabular-nums`
+- Carregadas do Google Fonts em `app/layout.tsx`.
 
-Padrões de componente já aplicados em `app/globals.css`: tabela com cabeçalho
-grafite + filete teal, cartões brancos sobre fundo creme, chips arredondados,
-rodapé grafite com a marca.
+### Forma
+
+Cantos **retos** (raio 0) em todo contêiner, cartões **sem sombra** com fio de 1px,
+grades separadas por fio de 1px. Foco visível: `outline: 2px solid #FFA436`, offset 3px.
+
+O logotipo é o componente `app/DexterityLogo.tsx` (SVG inline, cores por variável CSS).
+Não use `public/logo-dexterity.png` na interface: é grafite e fica ilegível sobre o
+fundo escuro — ele permanece no repo apenas para usos fora do app.
 
 ## Infra
 
