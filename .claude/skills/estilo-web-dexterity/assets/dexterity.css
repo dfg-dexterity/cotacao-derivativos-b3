@@ -23,6 +23,8 @@
   --dx-roxo: #98569a;
   --dx-amarelo: #ffa436;
   --dx-musgo: #597c59;
+  --dx-vermelho: #d9563e; /* só erro; em filete e ícone, nunca em texto */
+  --dx-vermelho-texto: #dd6953; /* o mesmo vermelho legível sobre superfície escura */
   --dx-off: #f7f3e7;
   --dx-grafite: #4d4d4d;
 
@@ -67,6 +69,32 @@
   --line: var(--dx-line);
   --muted: var(--dx-muted);
   --rotulo: var(--dx-rotulo);
+}
+
+/* Compatibilidade com as ferramentas de Dados de Mercado, que nomeiam os mesmos
+   tokens com o prefixo `--dxt-`. Permite adotar esta folha sem renomear nada no
+   projeto de destino. */
+:root {
+  --dxt-base: var(--dx-base);
+  --dxt-surface: var(--dx-surface);
+  --dxt-surface-2: var(--dx-surface-2);
+  --dxt-off: var(--dx-off);
+  --dxt-rotulo: var(--dx-rotulo);
+  --dxt-muted: var(--dx-muted);
+  --dxt-line: var(--dx-line);
+  --dxt-line-soft: rgba(247, 243, 231, 0.08);
+  --dxt-cerceta: var(--dx-cerceta);
+  --dxt-acc-txt: var(--dx-cerceta-texto);
+  --dxt-amarelo: var(--dx-amarelo);
+  --dxt-roxo: var(--dx-roxo);
+  --dxt-musgo: var(--dx-musgo);
+  --dxt-vermelho: var(--dx-vermelho);
+  --dxt-vermelho-txt: var(--dx-vermelho-texto);
+  --dxt-elevate-1: rgba(247, 243, 231, 0.05);
+  --dxt-elevate-2: rgba(247, 243, 231, 0.1);
+  --fonte-titulo: var(--dx-display);
+  --fonte-corpo: var(--dx-body);
+  --fonte-mono: var(--dx-mono);
 }
 
 /* ── 2. Base ─────────────────────────────────────────────────────────────── */
@@ -721,12 +749,16 @@ a {
   }
 }
 
+/* Erro é o único lugar de vermelho: âmbar já significa "baixa/atenção" e, se os
+   dois dividissem a cor, uma queda de preço e uma falha ficariam iguais. O
+   filete leva o vermelho cheio (3,96:1, acima do mínimo de 3:1 para elemento
+   gráfico); o texto leva o tom claro, que passa em 4,59:1. */
 .dx-erro {
-  border-left: 3px solid var(--dx-amarelo);
+  border-left: 3px solid var(--dx-vermelho);
 }
 
 .dx-erro strong {
-  color: var(--dx-amarelo);
+  color: var(--dx-vermelho-texto);
   font-weight: 500;
 }
 

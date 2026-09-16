@@ -95,8 +95,11 @@ atalho `padding` zerando a margem lateral.
 5. **Separação por filete de 1px**, não por sombra. A "grade" da marca é o
    `gap: 1px` sobre um fundo `--dx-line` — veja `.dx-grid`.
 6. **Alta e baixa** seguem o ticker do site: cerceta sobe (`.dx-up`), âmbar cai
-   (`.dx-down`). Não use verde/vermelho.
-7. **Âmbar, roxo e musgo são acentos pontuais** (alerta, filete lateral,
+   (`.dx-down`). Não use verde nem vermelho aqui.
+7. **Vermelho é só erro** (`.dx-erro`). Como âmbar já significa "baixa", dividir
+   a cor faria uma queda de preço e uma falha ficarem iguais. No filete vale
+   `--dx-vermelho`; em texto, `--dx-vermelho-texto`.
+8. **Âmbar, roxo e musgo são acentos pontuais** (alerta, filete lateral,
    categoria). Nunca superfície nem texto corrido.
 
 ## Paleta e tipografia
@@ -111,6 +114,8 @@ atalho `padding` zerando a margem lateral.
 | `--dx-cerceta`         | `#009994` | Ação: fundo de botão, borda, filete     |
 | `--dx-cerceta-texto`   | `#00B3AC` | Cerceta quando for **texto**            |
 | `--dx-amarelo`         | `#FFA436` | Foco, alerta, baixa                     |
+| `--dx-vermelho`        | `#D9563E` | **Só** erro, e só em filete/ícone        |
+| `--dx-vermelho-texto`  | `#DD6953` | O mesmo vermelho quando for **texto**    |
 | `--dx-off`             | `#F7F3E7` | Texto principal                         |
 | `--dx-texto-suave`     | `#D8D2C6` | Parágrafo secundário                    |
 | `--dx-rotulo`          | `#908C85` | Rótulo mono (legível sobre `--dx-surface`) |
@@ -142,3 +147,7 @@ O tema é o do site institucional em Odoo. Os arquivos publicados lá (o CSS do
 é a extração deles em forma reutilizável, com os nomes curtos do site
 (`--cerceta`, `--off`, `--base`…) mantidos como apelidos, de modo que **HTML
 copiado do site funciona sem edição**.
+
+As ferramentas de Dados de Mercado nomeiam os mesmos tokens com o prefixo
+`--dxt-`. Esses nomes também entram como apelidos, então a folha pode ser
+adotada num projeto que já siga aquela convenção sem renomear nada.

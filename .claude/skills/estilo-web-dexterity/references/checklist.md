@@ -52,11 +52,15 @@ Confirme no navegador que o conteúdo respeita a margem:
 - Rótulo mono usa `--dx-rotulo` (`#908C85`); `#6E6A64` só serve sobre
   `--dx-base`, não sobre cartão.
 - Texto sobre botão cerceta é `--dx-base`, nunca branco.
+- Vermelho de erro segue a mesma regra da cerceta: `--dx-vermelho` (`#D9563E`)
+  no filete, `--dx-vermelho-texto` (`#DD6953`) no texto. A cor cheia sobre
+  `--dx-surface` dá 3,96:1 — basta para elemento gráfico (3:1), reprova em texto.
 
 ```bash
-# Cerceta cheia usada como cor de TEXTO. O `[ \t;{]` antes de `color` evita
-# casar com border-color / accent-color / background-color, onde ela é correta.
-grep -rnE "[ \t;{]color: *var\(--dx-cerceta\)" --include=*.css .
+# Cerceta e vermelho cheios usados como cor de TEXTO. O `[ \t;{]` antes de
+# `color` evita casar com border-color / accent-color / background-color, onde
+# a cor cheia é correta.
+grep -rnE "[ \t;{]color: *var\(--dx-(cerceta|vermelho)\)" --include=*.css .
 ```
 
 Meça com as transições paradas. Logo após um clique ou um hover, o elemento
