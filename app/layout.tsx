@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -7,18 +7,19 @@ export const metadata: Metadata = {
     'Consulta de ajustes e cotações dos contratos futuros da B3, direto dos arquivos oficiais da Pesquisa por Pregão.',
 };
 
-export const viewport = {
-  themeColor: '#1b1b1b',
-  colorScheme: 'dark',
+export const viewport: Viewport = {
+  themeColor: '#1B1B1B',
 };
 
+/*
+ * As fontes da marca (Barlow Condensed nos títulos, Figtree no texto e IBM Plex
+ * Mono em rótulos e números) vêm do Google Fonts, como nas demais ferramentas.
+ * O tema é escuro único — daí a classe `dark` fixa no <html>.
+ */
 export default function LayoutRaiz({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className="dark">
       <head>
-        {/* Fontes da marca. Carregadas por <link> (e não por next/font) para que
-            `dexterity.css` continue portátil: o mesmo par de arquivos é colado
-            em projetos sem build, como o site em Odoo. */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link

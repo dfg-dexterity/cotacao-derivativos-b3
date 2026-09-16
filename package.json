@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "testar": "tsx scripts/testar-parser.ts && tsx scripts/verificar-marca.ts"
+    "testar": "tsx scripts/testar-parser.ts"
   },
   "dependencies": {
     "fast-xml-parser": "^4.5.3",
