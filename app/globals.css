@@ -32,6 +32,7 @@
   --dxt-roxo: #98569a;
   --dxt-musgo: #597c59;
   --dxt-vermelho: #d9563e;
+  --dxt-vermelho-txt: #dd6953; /* o mesmo vermelho, legível como texto */
 
   --dxt-elevate-1: rgba(247, 243, 231, 0.05);
   --dxt-elevate-2: rgba(247, 243, 231, 0.1);
@@ -250,9 +251,12 @@ button {
   white-space: nowrap;
 }
 
+/* No hover o botão inverte e a cerceta vira texto — aí vale `--dxt-acc-txt`. A
+   cor cheia sobre o cartão dá 4,42:1 e reprova no AA; a de texto dá 5,95:1. A
+   borda continua com a cheia, que como elemento gráfico já basta. */
 .campo-acao button:hover:not(:disabled) {
   background: transparent;
-  color: var(--dxt-cerceta);
+  color: var(--dxt-acc-txt);
 }
 
 .campo-acao button:disabled {
@@ -347,8 +351,10 @@ button {
   gap: 4px;
 }
 
+/* O filete leva o vermelho cheio — como elemento gráfico basta 3:1. Já o texto
+   precisa de 4,5:1, e #d9563e sobre o cartão dá 3,96:1; daí o tom claro. */
 .alerta-erro strong {
-  color: var(--dxt-vermelho);
+  color: var(--dxt-vermelho-txt);
   font-weight: 500;
 }
 

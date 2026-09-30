@@ -33,6 +33,8 @@ identidade visual da Dexterity.** Os ativos oficiais estão versionados em `bran
 | ------------------------------------ | ------------------------------------------------ |
 | `brand/logo-dexterity-horizontal.png`| Logo oficial completo (2342×626, fundo branco). Versão **limpa** — o original da skill `documento-dexterity` tem um cursor de mouse capturado sobre o "T", já removido aqui. |
 | `brand/logo-dexterity.svg`           | Recriação vetorial aproximada (símbolo + texto) para usos que exijam SVG. |
+| `brand/logo-dexterity-lockup-escuro.svg` | O lockup **oficial** traçado do site, em versão escura e autocontida — prefira este ao `logo-dexterity.svg` aproximado. |
+| `brand/simbolo-dexterity.svg`        | Só o símbolo de 4 pétalas.                       |
 | `public/logo-dexterity.png`          | Versão web do logo (504×128) usada no cabeçalho do app. |
 | `app/icon.png`                       | Favicon com o símbolo oficial (4 pétalas).       |
 
@@ -77,6 +79,24 @@ grades separadas por fio de 1px. Foco visível: `outline: 2px solid #FFA436`, of
 O logotipo é o componente `app/DexterityLogo.tsx` (SVG inline, cores por variável CSS).
 Não use `public/logo-dexterity.png` na interface: é grafite e fica ilegível sobre o
 fundo escuro — ele permanece no repo apenas para usos fora do app.
+
+### Skill `estilo-web-dexterity`
+
+Este mesmo tema está empacotado em `.claude/skills/estilo-web-dexterity/`, para
+aplicar a identidade em **outros** programas. Contém a folha CSS autocontida
+(`assets/dexterity.css`), os SVGs da marca, as receitas de componente
+(`references/componentes.md`) e a checagem final (`references/checklist.md`):
+
+```bash
+.claude/skills/estilo-web-dexterity/scripts/instalar.sh              # ~/.claude/skills
+.claude/skills/estilo-web-dexterity/scripts/instalar.sh /outro/repo  # .claude/skills de lá
+```
+
+A folha do skill usa o prefixo `--dx-*` e traz aliases de compatibilidade
+(inclusive `--dxt-*`, o prefixo usado aqui em `app/globals.css`), então serve
+tanto para um projeto novo quanto para um que já siga a convenção deste repo.
+Ela é a cópia canônica: este app **não** a consome — o estilo daqui vive em
+`app/globals.css`.
 
 ## Infra
 
