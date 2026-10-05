@@ -466,6 +466,8 @@ table { font-variant-numeric: tabular-nums; }
   .dxt-topbar-right::-webkit-scrollbar { display: none; }
   .dxt-nav { flex-wrap: nowrap; }
   .dxt-pagehead h1 { font-size: clamp(2rem, 9vw, 3.5rem); }
+  /* Sobrancelha longa quebra em duas linhas: com line-height 1 elas encostam. */
+  .dxt-eyebrow { line-height: 1.5; }
 }
 
 /*
