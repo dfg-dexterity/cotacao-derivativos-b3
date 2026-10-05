@@ -1,29 +1,19 @@
-interface DexterityLogoProps {
-  className?: string;
-  /** Cor das letras e da marca principal. */
-  mark?: string;
-  /** Cor cerceta dos elementos de destaque do logotipo. */
-  accent?: string;
-}
-
 /**
- * Logotipo institucional da Dexterity IT Solutions, no mesmo traçado usado no
- * site e nas demais ferramentas. As duas cores entram por variáveis CSS, o que
- * permite versões monocromáticas e garante contraste sobre o fundo escuro — o
- * PNG grafite anterior era praticamente invisível sobre #1B1B1B.
+ * Logotipo institucional da Dexterity IT Solutions, idêntico ao lockup inline
+ * do padrão das ferramentas de Dados de Mercado (logo-inline.svg.html): mesmo
+ * traçado, classe `dxt-logo` (tamanho vem do dexterity.css) e as duas cores por
+ * variável — `--mk` para as letras e o símbolo, `--acc` para a cerceta. Usado na
+ * barra de marca e no rodapé; nunca troque por <img>/PNG (o PNG grafite some
+ * sobre o fundo escuro).
  */
-export function DexterityLogo({
-  className,
-  mark = 'var(--dxt-off)',
-  accent = 'var(--dxt-cerceta)',
-}: DexterityLogoProps) {
+export function DexterityLogo() {
   return (
     <svg
+      className="dxt-logo"
       viewBox="0 0 445.4 100"
-      className={className}
       role="img"
       aria-label="Dexterity IT Solutions"
-      style={{ ['--mk' as string]: mark, ['--acc' as string]: accent }}
+      style={{ ['--mk' as string]: 'var(--dxt-off)', ['--acc' as string]: 'var(--dxt-cerceta)' }}
     >
       <g transform="scale(0.64475) translate(-206.8,-19)">
         <path fill="var(--mk)" d="M306.8,41.1c0,6.7-1.3,13.1-3.8,19.1s-6.1,11.4-10.8,16.1c-4.7,4.7-10.2,8.4-16.1,10.8c-6,2.5-12.4,3.8-19.1,3.8c-0.2,0-1.8,0-3.4,0c-1.1,0-2.2,0-2.8,0.1c-0.4,0-0.7-0.2-0.9-0.5l-21.6-35.4l-21-34.4c-0.4-0.6,0.1-1.5,0.8-1.5h48.5h49.2c0.5,0,1,0.4,1,1v10V41.1z"/>

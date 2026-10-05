@@ -10,8 +10,6 @@ import {
   type Cotacao,
 } from '../lib/tipos';
 
-import { DexterityLogo } from './DexterityLogo';
-
 interface RespostaApi {
   arquivo: string;
   data: string;
@@ -60,15 +58,17 @@ export default function Pagina() {
   const [ordenacao, setOrdenacao] = useState<{ coluna: ChaveColuna; direcao: 1 | -1 } | null>(null);
   const [pagina, setPagina] = useState(1);
 
-  // Modo de incorporação (iframe no Odoo, Notion, intranet): layout compacto,
-  // sem faixa de título nem rodapé, com a consulta já disparada no carregamento.
-  const [embutido, setEmbutido] = useState(false);
+  // `filtros=0` esconde o formulário (só a tabela — bom para painel).
   const [mostrarFiltros, setMostrarFiltros] = useState(true);
 
   // Lido no cliente: evita divergência de fuso e de query string na hidratação.
   useEffect(() => {
     const parametros = new URLSearchParams(window.location.search);
-    const modoEmbutido = parametros.get('embed') === '1';
+    // Modo incorporado (?embed=1, iframe do site, Notion, intranet): a classe é
+    // posta no <html> pelo script do <head> (layout.tsx) antes da primeira
+    // pintura, e o visual compacto vem todo do dexterity.css. Aqui só falta o
+    // comportamento: buscar sozinho e abrir links externos fora da moldura.
+    const modoEmbutido = document.documentElement.classList.contains('modo-embutido');
     const tipoUrl = (parametros.get('tipo') ?? '').toUpperCase();
     const dataUrl = parametros.get('data') ?? '';
     const prefixosUrl = (parametros.get('prefixos') ?? '')
@@ -79,13 +79,18 @@ export default function Pagina() {
     const dataEscolhida = /^\d{4}-\d{2}-\d{2}$/.test(dataUrl) ? dataUrl : ultimaDataUtil();
     const tipoEscolhido = tipoUrl === 'PR' || tipoUrl === 'SPRD' ? tipoUrl : 'SPRD';
 
-    setEmbutido(modoEmbutido);
     setMostrarFiltros(parametros.get('filtros') !== '0');
     setDataPregao(dataEscolhida);
     setTipo(tipoEscolhido);
     if (prefixosUrl.length > 0) setPrefixos(prefixosUrl.join(', '));
     setSomenteSeis(somenteSeisUrl);
-    document.body.classList.toggle('modo-embutido', modoEmbutido);
+
+    if (modoEmbutido) {
+      document.querySelectorAll<HTMLAnchorElement>('a[href^="http"]').forEach((ancora) => {
+        ancora.target = '_blank';
+        ancora.rel = 'noopener';
+      });
+    }
 
     if (modoEmbutido || parametros.get('auto') === '1') {
       void executarBusca({
@@ -222,7 +227,8 @@ export default function Pagina() {
         const numero = Number(valor);
         const texto = formatadorPreco.format(numero);
         if (coluna.chave === 'adjusted_quote_change_pct') {
-          const classe = numero > 0 ? 'positivo' : numero < 0 ? 'negativo' : '';
+          // Alta em cerceta, baixa em âmbar — vermelho fica reservado a erro.
+          const classe = numero > 0 ? 'dxt-up' : numero < 0 ? 'dxt-down' : '';
           return <span className={classe}>{texto}</span>;
         }
         return texto;
@@ -240,40 +246,32 @@ export default function Pagina() {
 
   return (
     <>
-      <div className="barra-topo">
-        <div className="container barra-topo-conteudo">
-          <a
-            href="https://www.dexterityit.com.br"
-            aria-label="Dexterity IT Solutions — ir para o site"
-          >
-            <DexterityLogo className="logo-dexterity" />
-          </a>
-          <span className="rotulo-ferramenta">
-            {embutido ? 'Cotações de Derivativos — B3' : 'Dados de Mercado'}
-          </span>
-        </div>
-      </div>
-
-      {!embutido && (
-        <header className="topo">
-          <div className="container">
-            <h1>Cotações de Derivativos — B3</h1>
+      <header className="dxt-pagehead">
+        <div className="dxt-pagehead-inner">
+          <div style={{ minWidth: 0 }}>
+            <span className="dxt-eyebrow" id="sobrancelha">
+              01 / Dados de mercado · Ajustes do pregão
+            </span>
+            <h1>Derivativos listados B3</h1>
             <p>
-              Ajustes e cotações dos contratos futuros, direto dos arquivos oficiais da{' '}
-              <strong>Pesquisa por Pregão</strong> da B3.
+              Ajustes e cotações dos contratos futuros, direto dos arquivos oficiais da Pesquisa por
+              Pregão da B3.
             </p>
           </div>
-        </header>
-      )}
+        </div>
+      </header>
 
-      <main className="container">
+      <main>
         {mostrarFiltros && (
-        <section className="cartao">
+        <section className="dxt-card dxt-card-body cartao">
           <form onSubmit={buscar} className="formulario">
             <div className="campo">
-              <label htmlFor="data">Data do pregão</label>
+              <label htmlFor="data" className="dxt-label">
+                Data do pregão
+              </label>
               <input
                 id="data"
+                className="dxt-input"
                 type="date"
                 value={dataPregao}
                 onChange={(evento) => setDataPregao(evento.target.value)}
@@ -282,17 +280,27 @@ export default function Pagina() {
             </div>
 
             <div className="campo">
-              <label htmlFor="tipo">Arquivo</label>
-              <select id="tipo" value={tipo} onChange={(evento) => setTipo(evento.target.value)}>
+              <label htmlFor="tipo" className="dxt-label">
+                Arquivo
+              </label>
+              <select
+                id="tipo"
+                className="dxt-select"
+                value={tipo}
+                onChange={(evento) => setTipo(evento.target.value)}
+              >
                 <option value="SPRD">SPRD — Derivativos (ajustes do pregão)</option>
                 <option value="PR">PR — Price Report completo (arquivo grande)</option>
               </select>
             </div>
 
             <div className="campo campo-prefixos">
-              <label htmlFor="prefixos">Prefixos de ticker (vazio = todas as cotações)</label>
+              <label htmlFor="prefixos" className="dxt-label">
+                Prefixos de ticker (vazio = todas as cotações)
+              </label>
               <input
                 id="prefixos"
+                className="dxt-input"
                 type="text"
                 placeholder="Ex.: DI1, DOL, WIN"
                 value={prefixos}
@@ -301,7 +309,7 @@ export default function Pagina() {
             </div>
 
             <div className="campo campo-acao">
-              <button type="submit" disabled={carregando}>
+              <button type="submit" className="dxt-btn" disabled={carregando}>
                 {carregando ? 'Consultando…' : 'Buscar cotações'}
               </button>
             </div>
@@ -312,7 +320,8 @@ export default function Pagina() {
               <button
                 key={prefixo}
                 type="button"
-                className={`chip ${prefixosAtivos.includes(prefixo) ? 'ativo' : ''}`}
+                className={`dxt-chip${prefixosAtivos.includes(prefixo) ? ' is-active' : ''}`}
+                aria-pressed={prefixosAtivos.includes(prefixo)}
                 onClick={() => alternarPrefixo(prefixo)}
               >
                 {prefixo}
@@ -336,21 +345,21 @@ export default function Pagina() {
         )}
 
         {carregando && (
-          <section className="cartao aviso-carregando">
+          <section className="dxt-card dxt-card-body cartao aviso-carregando">
             <span className="girador" aria-hidden="true" />
             Baixando e processando o arquivo da B3 — isso pode levar até um minuto…
           </section>
         )}
 
         {erro && !carregando && (
-          <section className="cartao alerta-erro" role="alert">
+          <section className="dxt-card dxt-card-body cartao alerta-erro" role="alert">
             <strong>Não foi possível concluir a consulta.</strong>
             <span>{erro}</span>
           </section>
         )}
 
         {resultado && !carregando && (
-          <section className="cartao resultados">
+          <section className="dxt-card cartao resultados">
             <div className="barra-resultados">
               <div className="resumo">
                 <strong>{formatadorInteiro.format(resultado.total)}</strong> cotações
@@ -366,6 +375,7 @@ export default function Pagina() {
               <div className="acoes">
                 <input
                   type="search"
+                  className="dxt-input"
                   placeholder="Filtrar ticker…"
                   value={busca}
                   onChange={(evento) => {
@@ -374,7 +384,12 @@ export default function Pagina() {
                   }}
                   aria-label="Filtrar por ticker"
                 />
-                <button type="button" onClick={baixarCsv} disabled={linhas.length === 0}>
+                <button
+                  type="button"
+                  className="dxt-btn dxt-btn--ghost dxt-btn--sm"
+                  onClick={baixarCsv}
+                  disabled={linhas.length === 0}
+                >
                   Baixar CSV
                 </button>
                 {urlJson && (
@@ -464,7 +479,7 @@ export default function Pagina() {
         )}
 
         {!resultado && !carregando && !erro && (
-          <section className="cartao vazio-inicial">
+          <section className="dxt-card dxt-card-body cartao vazio-inicial">
             <p>
               Escolha a data do pregão e clique em <strong>Buscar cotações</strong>. Sem prefixos,
               todas as cotações do arquivo são retornadas.
@@ -472,20 +487,6 @@ export default function Pagina() {
           </section>
         )}
       </main>
-
-      {!embutido && (
-        <footer className="rodape">
-          <div className="container rodape-conteudo">
-            <div className="marca-rodape">
-              DEXTER<span>IT</span>Y<small>SOLUTIONS</small>
-            </div>
-            <p>
-              Aplicativo não oficial. Dados públicos da B3 (Pesquisa por Pregão) — confira sempre as
-              fontes oficiais antes de decisões de investimento.
-            </p>
-          </div>
-        </footer>
-      )}
     </>
   );
 }

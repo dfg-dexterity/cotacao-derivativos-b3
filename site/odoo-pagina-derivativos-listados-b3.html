@@ -1,0 +1,182 @@
+<!--
+  Derivativos Listados B3 — bloco da página https://www.dexterityit.com.br/derivativos-listados-b3
+  (Odoo › Site › bloco Código Incorporado, conforme a MK-02-004, opção A).
+
+  Vai DENTRO da casca padrão das páginas de ferramenta do site (faixa de cotações, navegação,
+  rodapé e CSS .dxt), no lugar do conteúdo. Todas as classes usam o prefixo dx- e o CSS abaixo
+  é escopado em .dxt, para não vazar para as páginas de app do Odoo. Esse CSS é idêntico nas
+  cinco páginas de ferramenta.
+
+  Fonte da verdade: repositório dfg-dexterity/cotacao-derivativos-b3, pasta site/. Não editar
+  direto no Odoo — alterar aqui, testar e colar de novo.
+
+  Odoo › Otimizar SEO desta página:
+    Título:    Derivativos listados B3: ajustes e cotações de futuros   (54 caracteres)
+    Descrição: Ajustes e cotações de todos os contratos futuros da B3 (DI1, DOL, WIN, IND e mais), direto da Pesquisa por Pregão, com filtros e exportação em CSV para Excel.   (157 caracteres)
+    URL:       /derivativos-listados-b3
+
+  O iframe aponta para a aplicação em modo incorporado (?embed=1): sem a faixa de título e sem
+  as colunas do rodapé, já com a consulta do último dia útil disparada. Não troque pelo endereço
+  do projeto antigo "mercado-b3": ele tem a proteção da Vercel e mostra tela de login dentro da
+  moldura.
+-->
+<style>
+  .dxt .dx-fer-head { padding: 56px 0 28px; }
+  .dxt .dx-fer-head .dx-k {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase; color: #00B3AC;
+  }
+  .dxt .dx-fer-head h1 { margin: 12px 0 0; font-size: clamp(2.25rem, 7vw, 3.5rem); line-height: .92; }
+  .dxt .dx-fer-head p { margin: 16px 0 0; max-width: 44rem; font-size: 15px; line-height: 1.6; color: #A49F98; }
+  .dxt .dx-frame { border: 1px solid var(--line, rgba(247,243,231,.13)); background: var(--surface, #242424); overflow: hidden; }
+  .dxt .dx-frame iframe { display: block; width: 100%; height: clamp(680px, 82vh, 1100px); border: 0; background: var(--base, #1B1B1B); }
+  .dxt .dx-fer-texto { padding: 56px 0 8px; max-width: 64rem; }
+  .dxt .dx-fer-texto h2 { margin: 40px 0 12px; font-size: 1.5rem; }
+  .dxt .dx-fer-texto h2:first-child { margin-top: 0; }
+  .dxt .dx-fer-texto p { margin: 0 0 14px; font-size: 16px; line-height: 1.7; color: #A49F98; }
+  .dxt .dx-faq { margin-top: 8px; border-top: 1px solid var(--line, rgba(247,243,231,.13)); }
+  .dxt .dx-faq details { border-bottom: 1px solid var(--line, rgba(247,243,231,.13)); }
+  .dxt .dx-faq summary {
+    display: flex; justify-content: space-between; gap: 16px; padding: 16px 0;
+    cursor: pointer; list-style: none; font-size: 16px; color: #F7F3E7;
+  }
+  .dxt .dx-faq summary::-webkit-details-marker { display: none; }
+  .dxt .dx-faq summary::after { content: "+"; flex: none; font-family: 'IBM Plex Mono', monospace; color: #00B3AC; }
+  .dxt .dx-faq details[open] summary::after { content: "\2212"; }
+  .dxt .dx-faq details p { margin: 0 0 18px; }
+</style>
+
+<section class="dx-section"><div class="dx-wrap">
+  <header class="dx-fer-head">
+    <div class="dx-k">Ferramentas · Derivativos</div>
+    <h1>Derivativos listados B3</h1>
+    <p>
+      Ajuste do dia e cotações de todos os contratos futuros da B3 — DI1, DOL, WIN, IND e os
+      demais —, direto dos arquivos oficiais da Pesquisa por Pregão, com filtros e exportação em
+      CSV para o Excel.
+    </p>
+  </header>
+  <div class="dx-frame">
+    <iframe src="https://cotacao-derivativos-b3.vercel.app/?embed=1"
+            title="Derivativos Listados B3 — ajustes e cotações dos contratos futuros" loading="lazy"></iframe>
+  </div>
+</div></section>
+
+<section class="dx-section"><div class="dx-wrap"><div class="dx-fer-texto">
+  <h2>O que a ferramenta faz</h2>
+  <p>
+    Escolha a data do pregão e a ferramenta traz todos os instrumentos do arquivo de derivativos
+    da B3: DI1, DOL, WDO, IND, WIN, DAP, FRC, BGI, CCM, ICF e qualquer outro listado no dia. Para
+    cada ticker aparecem contratos em aberto, preços de abertura, mínimo, máximo, médio e último,
+    número de negócios, ajuste do dia, ajuste anterior e a variação percentual entre os dois,
+    além do status de cada ajuste, da moeda e do código do instrumento. A tabela filtra por
+    ticker, ordena por qualquer coluna e é baixada em CSV.
+  </p>
+
+  <h2>Como os números são obtidos</h2>
+  <p>
+    Nada é digitado à mão. A cada consulta o servidor baixa da B3 o arquivo da Pesquisa por Pregão
+    da data escolhida — o SPRD, com os ajustes dos derivativos, ou o PR, o Price Report completo —,
+    abre o ZIP (às vezes há um ZIP dentro do outro), lê o XML no padrão BVBG e devolve cada
+    instrumento como a B3 publicou. O único número calculado pela ferramenta é a variação do
+    ajuste: ajuste do dia dividido pelo ajuste anterior, menos um. A B3 publica os arquivos só em
+    dias úteis, normalmente depois do fechamento, por isso a tela abre com o dia útil anterior.
+  </p>
+
+  <h2>Da tela para a planilha</h2>
+  <p>
+    Os atalhos de prefixo e a opção de manter só os tickers de seis caracteres deixam na tela
+    apenas os vencimentos padrão, sem estratégias e spreads. O CSV sai no formato do Excel em
+    português, com ponto e vírgula e vírgula decimal, e o botão Ver JSON mostra o endereço da mesma
+    consulta em formato de dados, útil para alimentar uma planilha, um painel interno ou a
+    conferência dos ajustes diários sem copiar e colar.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <div class="dx-faq">
+    <details>
+      <summary>De onde vêm os dados?</summary>
+      <p>
+        Dos arquivos públicos da Pesquisa por Pregão da B3, baixados no momento da consulta e lidos
+        sem alteração. A ferramenta não é oficial e não tem vínculo com a B3: confira sempre as
+        publicações oficiais antes de decisões de investimento ou lançamentos contábeis.
+      </p>
+    </details>
+    <details>
+      <summary>Qual a diferença entre os arquivos SPRD e PR?</summary>
+      <p>
+        O SPRD traz os derivativos com os ajustes do pregão e é rápido de processar. O PR é o Price
+        Report completo, com muito mais instrumentos; o arquivo é grande e pode levar perto de um
+        minuto para baixar e processar.
+      </p>
+    </details>
+    <details>
+      <summary>Por que a consulta não encontrou o arquivo?</summary>
+      <p>
+        A B3 só publica em dias úteis, normalmente após o fechamento do pregão. Em fim de semana,
+        feriado ou antes da publicação a ferramenta avisa que o arquivo não está disponível; basta
+        escolher outra data.
+      </p>
+    </details>
+    <details>
+      <summary>Como é calculada a variação do ajuste?</summary>
+      <p>
+        É a variação percentual entre o ajuste do dia e o ajuste anterior informados no próprio
+        arquivo da B3: ajuste dividido pelo ajuste anterior, menos um, vezes cem. Alta aparece em
+        cerceta e baixa em âmbar.
+      </p>
+    </details>
+    <details>
+      <summary>A ferramenta é gratuita?</summary>
+      <p>
+        Sim. É uma ferramenta aberta da Dexterity IT Solutions, consultoria SAP especializada em
+        Tesouraria e Risco, sem cadastro e sem limite de consultas.
+      </p>
+    </details>
+  </div>
+</div></div></section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://www.dexterityit.com.br/derivativos-listados-b3#ferramenta",
+      "name": "Derivativos Listados B3",
+      "alternateName": "Cotações de Derivativos B3",
+      "url": "https://www.dexterityit.com.br/derivativos-listados-b3",
+      "description": "Ajuste do dia e cotações (abertura, mínimo, máximo, médio, último, negócios e contratos em aberto) de todos os contratos futuros listados na B3, lidos dos arquivos oficiais da Pesquisa por Pregão, com filtro por ticker e exportação em CSV.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "inLanguage": "pt-BR",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" },
+      "publisher": {
+        "@type": "ProfessionalService",
+        "@id": "https://www.dexterityit.com.br/#organizacao",
+        "name": "Dexterity IT Solutions",
+        "url": "https://www.dexterityit.com.br"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.dexterityit.com.br/" },
+        { "@type": "ListItem", "position": 2, "name": "Ferramentas", "item": "https://www.dexterityit.com.br/ferramentas" },
+        { "@type": "ListItem", "position": 3, "name": "Derivativos Listados B3", "item": "https://www.dexterityit.com.br/derivativos-listados-b3" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "De onde vêm os dados?", "acceptedAnswer": { "@type": "Answer", "text": "Dos arquivos públicos da Pesquisa por Pregão da B3, baixados no momento da consulta e lidos sem alteração. A ferramenta não é oficial e não tem vínculo com a B3: confira sempre as publicações oficiais antes de decisões de investimento ou lançamentos contábeis." } },
+        { "@type": "Question", "name": "Qual a diferença entre os arquivos SPRD e PR?", "acceptedAnswer": { "@type": "Answer", "text": "O SPRD traz os derivativos com os ajustes do pregão e é rápido de processar. O PR é o Price Report completo, com muito mais instrumentos; o arquivo é grande e pode levar perto de um minuto para baixar e processar." } },
+        { "@type": "Question", "name": "Por que a consulta não encontrou o arquivo?", "acceptedAnswer": { "@type": "Answer", "text": "A B3 só publica em dias úteis, normalmente após o fechamento do pregão. Em fim de semana, feriado ou antes da publicação a ferramenta avisa que o arquivo não está disponível; basta escolher outra data." } },
+        { "@type": "Question", "name": "Como é calculada a variação do ajuste?", "acceptedAnswer": { "@type": "Answer", "text": "É a variação percentual entre o ajuste do dia e o ajuste anterior informados no próprio arquivo da B3: ajuste dividido pelo ajuste anterior, menos um, vezes cem. Alta aparece em cerceta e baixa em âmbar." } },
+        { "@type": "Question", "name": "A ferramenta é gratuita?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. É uma ferramenta aberta da Dexterity IT Solutions, consultoria SAP especializada em Tesouraria e Risco, sem cadastro e sem limite de consultas." } }
+      ]
+    }
+  ]
+}
+</script>

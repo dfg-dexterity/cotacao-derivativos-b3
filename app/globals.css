@@ -1,180 +1,46 @@
 /*
  * ============================================================================
- * Identidade visual — Dexterity IT Solutions
+ * Derivativos Listados B3 — estilos próprios da ferramenta
  * ============================================================================
  *
- * Mesmo sistema visual da Calculadora CDI/CDB e das demais ferramentas de Dados
- * de Mercado (taxas-indices, bndes-um, curvas):
+ * O sistema visual vem de app/dexterity.css, cópia byte a byte da folha
+ * compartilhada pelas ferramentas de Dados de Mercado (tokens --dxt-*,
+ * tipografia, barra de marca, faixa de título, rodapé, cartão, botões, campos,
+ * chips, celular e modo incorporado). Não edite aquela folha aqui, e não
+ * acrescente estilo de casca neste arquivo: aqui fica só o que é desta tela
+ * (formulário, chips, estados, tabela e paginação), sempre com os tokens
+ * --dxt-* e a largura --dxt-container.
  *
- *   Base #1B1B1B · off-white #F7F3E7 · cerceta #009994 · destaque #00B3AC
- *   âmbar #FFA436 · roxo #98569A · musgo #597C59
- *   Barlow Condensed (títulos) · Figtree (texto) · IBM Plex Mono (rótulos/números)
- *   Cantos retos, grades com fio de 1px, tema escuro único.
- *
- * Semântica de cor: cerceta = alta/ganho, âmbar = baixa/atenção, vermelho só
- * para erro, roxo para nota informativa.
+ * Regras da marca: cantos retos, sem sombra, filete de 1px; cerceta = alta e
+ * ação, âmbar = baixa e foco, vermelho só erro.
  * ----------------------------------------------------------------------------
  */
 
 :root {
-  --dxt-base: #1b1b1b;
-  --dxt-surface: #242424;
-  --dxt-surface-2: #2e2e2e;
-  --dxt-off: #f7f3e7;
-  --dxt-rotulo: #908c85;
-  --dxt-muted: #a49f98;
-  --dxt-line: rgba(247, 243, 231, 0.13);
-  --dxt-line-soft: rgba(247, 243, 231, 0.08);
-
-  --dxt-cerceta: #009994;
-  --dxt-acc-txt: #00b3ac;
-  --dxt-amarelo: #ffa436;
-  --dxt-roxo: #98569a;
-  --dxt-musgo: #597c59;
-  --dxt-vermelho: #d9563e;
-  --dxt-vermelho-txt: #dd6953; /* o mesmo vermelho, legível como texto */
-
-  --dxt-elevate-1: rgba(247, 243, 231, 0.05);
-  --dxt-elevate-2: rgba(247, 243, 231, 0.1);
-
-  --fonte-titulo: 'Barlow Condensed', 'Figtree', system-ui, sans-serif;
-  --fonte-corpo: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --fonte-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  color-scheme: dark;
+  /* O vermelho da marca legível como texto: #D9563E sobre o cartão dá 3,96:1 e
+     reprova no AA; este tom dá 4,5:1. O vermelho cheio fica só no filete. */
+  --b3-vermelho-txt: #dd6953;
 }
 
-* {
-  box-sizing: border-box;
+main {
+  width: var(--dxt-container);
+  margin-inline: auto;
+  padding: 32px 0 0;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: var(--fonte-corpo);
-  font-weight: 300;
-  background: var(--dxt-base);
-  color: var(--dxt-off);
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--fonte-titulo);
-  font-weight: 600;
-  line-height: 0.94;
-  letter-spacing: 0.005em;
-  text-transform: uppercase;
-  margin: 0;
-}
-
-:focus-visible {
-  outline: 2px solid var(--dxt-amarelo);
-  outline-offset: 3px;
-}
-
-::selection {
-  background: var(--dxt-cerceta);
-  color: var(--dxt-off);
-}
-
-.container {
-  width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-main.container {
-  flex: 1;
-  padding-bottom: 48px;
-}
-
-/* ===== Barra de marca fixa no topo ===== */
-.barra-topo {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(27, 27, 27, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--dxt-line);
-}
-
-.barra-topo-conteudo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding-top: 16px;
-  padding-bottom: 16px;
-}
-
-.logo-dexterity {
-  height: 27px;
-  width: auto;
-  display: block;
-  overflow: visible;
-}
-
-/* Sobrancelha em mono, como os rótulos de seção do site. */
-.rotulo-ferramenta {
-  font-family: var(--fonte-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--dxt-acc-txt);
-  white-space: nowrap;
-}
-
-/* ===== Faixa de título ===== */
-.topo {
-  border-bottom: 1px solid var(--dxt-line);
-  padding: 40px 0;
-  margin-bottom: 32px;
-}
-
-.topo h1 {
-  margin: 0;
-  font-size: clamp(2.25rem, 5vw, 3.5rem);
-  line-height: 0.92;
-  color: var(--dxt-off);
-}
-
-.topo p {
-  margin: 16px 0 0;
-  max-width: 42rem;
-  color: var(--dxt-rotulo);
-  font-size: 0.875rem;
-}
-
-.topo p strong {
-  color: var(--dxt-acc-txt);
-  font-weight: 500;
-}
-
-/* ===== Cartões: bloco reto com fio de 1px, sem sombra ===== */
+/* Blocos da tela: .dxt-card (+ .dxt-card-body) do padrão, empilhados. */
 .cartao {
-  background: var(--dxt-surface);
-  border: 1px solid var(--dxt-line);
-  border-radius: 0;
-  padding: 24px;
   margin-bottom: 20px;
 }
 
 /* ===== Formulário ===== */
+.formulario {
+  display: grid;
+  grid-template-columns: 170px 320px 1fr auto;
+  gap: 16px;
+  align-items: end;
+}
+
 .campo {
   display: flex;
   flex-direction: column;
@@ -184,118 +50,35 @@ main.container {
   min-width: 0;
 }
 
-.campo label {
-  font-family: var(--fonte-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  color: var(--dxt-rotulo);
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-}
-
-.campo input,
-.campo select {
+.campo .dxt-input,
+.campo .dxt-select {
   width: 100%;
   min-width: 0;
-  height: 36px;
-  padding: 0 12px;
-  border: 1px solid var(--dxt-line);
-  border-radius: 0;
-  font-size: 0.875rem;
-  font-family: var(--fonte-corpo);
-  font-weight: 300;
-  background: var(--dxt-base);
-  color: var(--dxt-off);
 }
 
-.campo input:hover,
-.campo select:hover {
-  border-color: rgba(247, 243, 231, 0.24);
-}
-
-.campo input:focus,
-.campo select:focus {
-  outline: 2px solid var(--dxt-amarelo);
-  outline-offset: 3px;
+.campo .dxt-input:focus,
+.campo .dxt-select:focus {
   border-color: var(--dxt-cerceta);
 }
 
-.campo input::placeholder {
-  color: var(--dxt-rotulo);
-}
-
-.campo input[type='date']::-webkit-calendar-picker-indicator {
-  filter: invert(1) opacity(0.55);
-  cursor: pointer;
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-}
-
-/* Botão reto em caixa alta que inverte no hover — o botão do site. */
-.campo-acao button {
-  height: 36px;
-  padding: 0 24px;
-  background: var(--dxt-cerceta);
-  color: var(--dxt-base);
-  border: 1px solid var(--dxt-cerceta);
-  border-radius: 0;
-  font-family: var(--fonte-titulo);
-  font-weight: 600;
-  font-size: 0.9375rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  transition: background-color 0.15s, color 0.15s;
-  white-space: nowrap;
+.campo-acao .dxt-btn {
+  padding-inline: 24px;
 }
 
 /* No hover o botão inverte e a cerceta vira texto — aí vale `--dxt-acc-txt`. A
    cor cheia sobre o cartão dá 4,42:1 e reprova no AA; a de texto dá 5,95:1. A
    borda continua com a cheia, que como elemento gráfico já basta. */
-.campo-acao button:hover:not(:disabled) {
-  background: transparent;
+.campo-acao .dxt-btn:hover:not(:disabled) {
   color: var(--dxt-acc-txt);
 }
 
-.campo-acao button:disabled {
-  opacity: 0.5;
-  cursor: wait;
-}
-
-/* ===== Chips ===== */
+/* ===== Atalhos de prefixo ===== */
 .chips {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   margin-top: 16px;
-}
-
-.chip {
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--dxt-muted);
-  border-radius: 0;
-  padding: 5px 13px;
-  font-family: var(--fonte-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition: color 0.15s, border-color 0.15s, background-color 0.15s;
-}
-
-.chip:hover {
-  color: var(--dxt-off);
-  background: var(--dxt-elevate-1);
-}
-
-.chip.ativo {
-  background: transparent;
-  border-color: var(--dxt-cerceta);
-  color: var(--dxt-acc-txt);
 }
 
 .opcao-seis {
@@ -327,6 +110,7 @@ button {
   color: var(--dxt-muted);
 }
 
+/* O girador é a única forma redonda da tela (exceção prevista no padrão). */
 .girador {
   width: 18px;
   height: 18px;
@@ -351,26 +135,22 @@ button {
   gap: 4px;
 }
 
-/* O filete leva o vermelho cheio — como elemento gráfico basta 3:1. Já o texto
-   precisa de 4,5:1, e #d9563e sobre o cartão dá 3,96:1; daí o tom claro. */
 .alerta-erro strong {
-  color: var(--dxt-vermelho-txt);
+  color: var(--b3-vermelho-txt);
   font-weight: 500;
 }
 
 .vazio-inicial {
   color: var(--dxt-rotulo);
   text-align: center;
-  padding: 40px 20px;
 }
 
 .vazio-inicial p {
-  margin: 0;
+  margin: 16px 0;
 }
 
 /* ===== Resultados ===== */
 .resultados {
-  padding: 0;
   overflow: hidden;
 }
 
@@ -391,7 +171,7 @@ button {
 
 .resumo strong {
   color: var(--dxt-off);
-  font-family: var(--fonte-mono);
+  font-family: var(--dxt-font-mono);
   font-variant-numeric: tabular-nums;
   font-size: 1rem;
   font-weight: 500;
@@ -400,9 +180,7 @@ button {
 .resumo code {
   background: var(--dxt-base);
   border: 1px solid var(--dxt-line);
-  border-radius: 0;
   padding: 2px 7px;
-  font-family: var(--fonte-mono);
   font-size: 0.75rem;
   color: var(--dxt-muted);
 }
@@ -413,52 +191,18 @@ button {
   gap: 8px;
 }
 
-.acoes input[type='search'] {
+.acoes .dxt-input {
+  min-height: 32px;
   height: 32px;
-  padding: 0 12px;
-  border: 1px solid var(--dxt-line);
-  border-radius: 0;
-  font-size: 0.875rem;
-  font-family: var(--fonte-corpo);
-  font-weight: 300;
-  background: var(--dxt-base);
-  color: var(--dxt-off);
+  padding-block: 0;
   width: 180px;
 }
 
-.acoes input[type='search']::placeholder {
-  color: var(--dxt-rotulo);
-}
-
-.acoes button {
-  height: 32px;
-  padding: 0 14px;
-  background: transparent;
-  color: var(--dxt-off);
-  border: 1px solid var(--dxt-line);
-  border-radius: 0;
-  font-family: var(--fonte-titulo);
-  font-weight: 600;
-  font-size: 0.8125rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  transition: border-color 0.15s, background-color 0.15s;
-}
-
-.acoes button:hover:not(:disabled) {
-  border-color: var(--dxt-off);
-  background: var(--dxt-elevate-1);
-}
-
-.acoes button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .ligacao-json {
-  font-family: var(--fonte-mono);
+  font-family: var(--dxt-font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.06em;
+  white-space: nowrap;
   color: var(--dxt-acc-txt);
   text-decoration: none;
   border-bottom: 1px solid rgba(0, 179, 172, 0.4);
@@ -470,70 +214,72 @@ button {
 }
 
 .sem-registros {
+  margin: 0;
   padding: 36px 20px;
   text-align: center;
   color: var(--dxt-rotulo);
 }
 
-/* ===== Tabela ===== */
+/* ===== Tabela (rola dentro do cartão, nunca a página) ===== */
 .tabela-rolagem {
-  overflow-x: auto;
+  overflow: auto;
   max-height: 70vh;
-  overflow-y: auto;
 }
 
-table {
+.tabela-rolagem table {
   border-collapse: collapse;
   width: 100%;
   font-size: 0.8125rem;
   white-space: nowrap;
-  font-variant-numeric: tabular-nums;
 }
 
-thead th {
+.tabela-rolagem thead th {
   position: sticky;
   top: 0;
+  z-index: 1;
   background: var(--dxt-surface-2);
   color: var(--dxt-rotulo);
   border-bottom: 1px solid var(--dxt-line);
   padding: 11px 12px;
   text-align: left;
-  font-family: var(--fonte-mono);
+  font-family: var(--dxt-font-mono);
   font-size: 0.6875rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   cursor: pointer;
   user-select: none;
-  z-index: 1;
 }
 
-thead th:hover {
+.tabela-rolagem thead th:hover {
   color: var(--dxt-off);
 }
 
-thead th.numerica {
-  text-align: right;
-}
-
-tbody td {
+.tabela-rolagem tbody td {
   padding: 8px 12px;
   border-bottom: 1px solid var(--dxt-line-soft);
   color: var(--dxt-off);
 }
 
-tbody td.numerica {
+.tabela-rolagem .numerica {
   text-align: right;
-  font-family: var(--fonte-mono);
-  font-variant-numeric: tabular-nums;
 }
 
-tbody tr:nth-child(even) {
+.tabela-rolagem td.numerica {
+  font-family: var(--dxt-font-mono);
+}
+
+.tabela-rolagem tbody tr:nth-child(even) {
   background: rgba(247, 243, 231, 0.02);
 }
 
-tbody tr:hover {
+.tabela-rolagem tbody tr:hover {
   background: var(--dxt-elevate-1);
+}
+
+.tabela-rolagem .dxt-up,
+.tabela-rolagem .dxt-down {
+  font-weight: 500;
 }
 
 .seta {
@@ -544,17 +290,6 @@ tbody tr:hover {
   color: var(--dxt-rotulo);
 }
 
-/* Alta é cerceta e baixa é âmbar — vermelho fica reservado a erro. */
-.positivo {
-  color: var(--dxt-acc-txt);
-  font-weight: 500;
-}
-
-.negativo {
-  color: var(--dxt-amarelo);
-  font-weight: 500;
-}
-
 /* ===== Paginação ===== */
 .paginacao {
   display: flex;
@@ -563,7 +298,7 @@ tbody tr:hover {
   gap: 8px;
   padding: 14px;
   border-top: 1px solid var(--dxt-line);
-  font-family: var(--fonte-mono);
+  font-family: var(--dxt-font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.06em;
   color: var(--dxt-rotulo);
@@ -573,10 +308,12 @@ tbody tr:hover {
   min-width: 32px;
   height: 32px;
   border: 1px solid var(--dxt-line);
-  background: transparent;
   border-radius: 0;
+  background: transparent;
+  font-family: var(--dxt-font-mono);
   font-size: 0.875rem;
   color: var(--dxt-muted);
+  cursor: pointer;
   transition: border-color 0.15s, color 0.15s;
 }
 
@@ -590,104 +327,19 @@ tbody tr:hover {
   cursor: not-allowed;
 }
 
-/* ===== Rodapé ===== */
-.rodape {
-  border-top: 1px solid var(--dxt-line);
-  padding: 32px 0;
-  font-size: 0.75rem;
-  color: var(--dxt-rotulo);
+/* ===== Modo incorporado (?embed=1) =====
+   A casca compacta vem do dexterity.css; aqui só o miolo desta tela: menos
+   respiro e a tabela aproveitando a altura da moldura. */
+.modo-embutido main {
+  padding-top: 16px;
 }
 
-.rodape-conteudo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-.marca-rodape {
-  font-family: var(--fonte-titulo);
-  font-size: 21px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--dxt-off);
-  line-height: 1.1;
-  white-space: nowrap;
-  text-transform: uppercase;
-}
-
-.marca-rodape span {
-  color: var(--dxt-acc-txt);
-}
-
-.marca-rodape small {
-  display: block;
-  font-family: var(--fonte-mono);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.42em;
-  color: var(--dxt-rotulo);
-}
-
-.rodape p {
-  margin: 0;
-  max-width: 720px;
-  line-height: 1.6;
-}
-
-/* ===== Modo de incorporação (?embed=1) =====
-   Layout enxuto para caber dentro de um iframe do Odoo/Notion: sem faixa de
-   título nem rodapé, margens menores e tabela ocupando a altura disponível. */
-body.modo-embutido {
-  background: var(--dxt-base);
-  min-height: 0;
-}
-
-body.modo-embutido .container {
-  max-width: none;
-  padding: 0 12px;
-}
-
-body.modo-embutido .barra-topo-conteudo {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-body.modo-embutido .logo-dexterity {
-  height: 22px;
-}
-
-body.modo-embutido .rotulo-ferramenta {
-  color: var(--dxt-rotulo);
-}
-
-body.modo-embutido main.container {
-  padding-top: 12px;
-  padding-bottom: 12px;
-}
-
-body.modo-embutido .cartao {
+.modo-embutido .cartao {
   margin-bottom: 12px;
 }
 
-body.modo-embutido .tabela-rolagem {
+.modo-embutido .tabela-rolagem {
   max-height: calc(100vh - 165px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-  }
-}
-
-/* ===== Formulário de consulta ===== */
-.formulario {
-  display: grid;
-  grid-template-columns: 170px 320px 1fr auto;
-  gap: 16px;
-  align-items: end;
 }
 
 /* ===== Responsivo ===== */
@@ -696,15 +348,12 @@ body.modo-embutido .tabela-rolagem {
     grid-template-columns: 1fr 1fr;
   }
 
-  .campo-prefixos {
-    grid-column: 1 / -1;
-  }
-
+  .campo-prefixos,
   .campo-acao {
     grid-column: 1 / -1;
   }
 
-  .campo-acao button {
+  .campo-acao .dxt-btn {
     width: 100%;
   }
 
@@ -716,19 +365,19 @@ body.modo-embutido .tabela-rolagem {
     width: 100%;
   }
 
-  .acoes input[type='search'] {
+  .acoes .dxt-input {
     flex: 1;
     width: auto;
     min-width: 0;
-  }
-
-  .rotulo-ferramenta {
-    display: none;
   }
 }
 
 @media (max-width: 560px) {
   .formulario {
     grid-template-columns: 1fr;
+  }
+
+  .barra-resultados {
+    padding-inline: 16px;
   }
 }
