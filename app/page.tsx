@@ -10,6 +10,13 @@ import {
   type Cotacao,
 } from '../lib/tipos';
 
+import {
+  ROTULOS_INSTRUMENTO,
+  ROTULOS_SAP,
+  consolidarPorInstrumento,
+  datasDisponiveis,
+  gerarPlanilhaFw17,
+} from '../lib/fw17';
 import { DexterityLogo } from './DexterityLogo';
 
 interface RespostaApi {
@@ -59,6 +66,12 @@ export default function Pagina() {
   const [busca, setBusca] = useState('');
   const [ordenacao, setOrdenacao] = useState<{ coluna: ChaveColuna; direcao: 1 | -1 } | null>(null);
   const [pagina, setPagina] = useState(1);
+
+  // Planilha de apoio à FW17 (modal de exportação).
+  const [modalFw17, setModalFw17] = useState(false);
+  const [dataFw17, setDataFw17] = useState('');
+  const [gerandoFw17, setGerandoFw17] = useState(false);
+  const [erroFw17, setErroFw17] = useState<string | null>(null);
 
   // Modo de incorporação (iframe no Odoo, Notion, intranet): layout compacto,
   // sem faixa de título nem rodapé, com a consulta já disparada no carregamento.
@@ -206,6 +219,48 @@ export default function Pagina() {
     ancora.download = `cotacoes_${resultado.tipo}_${resultado.data}.csv`;
     ancora.click();
     URL.revokeObjectURL(url);
+  }
+
+  // As linhas do filtro/busca ativo, consolidadas: um instrumento por linha.
+  const datasFw17 = useMemo(() => datasDisponiveis(linhas), [linhas]);
+  const instrumentosFw17 = useMemo(
+    () => (dataFw17 ? consolidarPorInstrumento(linhas, dataFw17) : []),
+    [linhas, dataFw17],
+  );
+
+  function abrirFw17() {
+    setDataFw17(datasFw17[0] ?? '');
+    setErroFw17(null);
+    setModalFw17(true);
+  }
+
+  useEffect(() => {
+    if (!modalFw17) return;
+    const fechar = (evento: KeyboardEvent) => {
+      if (evento.key === 'Escape') setModalFw17(false);
+    };
+    window.addEventListener('keydown', fechar);
+    return () => window.removeEventListener('keydown', fechar);
+  }, [modalFw17]);
+
+  async function baixarFw17() {
+    if (instrumentosFw17.length === 0) return;
+    setGerandoFw17(true);
+    setErroFw17(null);
+    try {
+      const blob = await gerarPlanilhaFw17(instrumentosFw17);
+      const url = URL.createObjectURL(blob);
+      const ancora = document.createElement('a');
+      ancora.href = url;
+      ancora.download = `fw17_instrumentos_${dataFw17}.xlsx`;
+      ancora.click();
+      URL.revokeObjectURL(url);
+      setModalFw17(false);
+    } catch {
+      setErroFw17('Não foi possível gerar a planilha. Tente novamente.');
+    } finally {
+      setGerandoFw17(false);
+    }
   }
 
   function renderizarValor(cotacao: Cotacao, coluna: Coluna) {
@@ -377,6 +432,9 @@ export default function Pagina() {
                 <button type="button" onClick={baixarCsv} disabled={linhas.length === 0}>
                   Baixar CSV
                 </button>
+                <button type="button" onClick={abrirFw17} disabled={linhas.length === 0}>
+                  Planilha para FW17
+                </button>
                 {urlJson && (
                   <a className="ligacao-json" href={urlJson} target="_blank" rel="noreferrer">
                     Ver JSON
@@ -472,6 +530,80 @@ export default function Pagina() {
           </section>
         )}
       </main>
+
+      {modalFw17 && (
+        <div className="modal-fundo" onClick={() => setModalFw17(false)}>
+          <div
+            className="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-fw17"
+            onClick={(evento) => evento.stopPropagation()}
+          >
+            <h2 id="titulo-fw17">Planilha para FW17</h2>
+            <p>
+              Planilha de <strong>apoio à digitação</strong> na transação FW17 do SAP GUI — não é
+              carga automática nem upload. Traz uma linha por instrumento, a partir das{' '}
+              {formatadorInteiro.format(linhas.length)} cotações do filtro e da busca ativos.
+            </p>
+            <p>
+              As colunas de <strong>Dados do instrumento</strong> vêm da fonte oficial (B3 / Tesouro
+              Nacional) e as de <strong>Preencher no SAP</strong> ficam em branco de propósito,
+              porque dependem da configuração do cliente.
+            </p>
+
+            <div className="modal-familias">
+              <div>
+                <span className="modal-rotulo">Dados do instrumento</span>
+                {ROTULOS_INSTRUMENTO.join(' · ')}
+              </div>
+              <div>
+                <span className="modal-rotulo modal-rotulo-sap">Preencher no SAP</span>
+                {ROTULOS_SAP.join(' · ')}
+              </div>
+            </div>
+
+            <div className="campo">
+              <label htmlFor="data-fw17">Data de referência</label>
+              <select
+                id="data-fw17"
+                value={dataFw17}
+                onChange={(evento) => setDataFw17(evento.target.value)}
+              >
+                {datasFw17.map((data) => (
+                  <option key={data} value={data}>
+                    {formatarData(data)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <p className="dica">
+              {formatadorInteiro.format(instrumentosFw17.length)} instrumentos serão exportados.
+              Se um instrumento aparece em mais de um dia, vale a cotação mais recente até a data
+              de referência.
+            </p>
+            {erroFw17 && (
+              <p className="modal-erro" role="alert">
+                {erroFw17}
+              </p>
+            )}
+
+            <div className="modal-acoes">
+              <button type="button" className="secundario" onClick={() => setModalFw17(false)}>
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => void baixarFw17()}
+                disabled={gerandoFw17 || instrumentosFw17.length === 0}
+              >
+                {gerandoFw17 ? 'Gerando…' : 'Baixar .xlsx'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {!embutido && (
         <footer className="rodape">
