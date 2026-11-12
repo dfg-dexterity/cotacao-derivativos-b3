@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState, useCallback } from 'react';
 import {
   COLUNAS,
   PREFIXOS_SUGERIDOS,
@@ -234,14 +234,22 @@ export default function Pagina() {
     setModalFw17(true);
   }
 
+  // Fechar durante a geração deixava o erro (setErroFw17) ser escrito num diálogo que já sumiu,
+  // e o download chegava de repente depois dele fechar. A geração é curta: enquanto ela corre,
+  // o diálogo fica, para o resultado ter onde aparecer.
+  const fecharModalFw17 = useCallback(() => {
+    if (gerandoFw17) return;
+    setModalFw17(false);
+  }, [gerandoFw17]);
+
   useEffect(() => {
     if (!modalFw17) return;
     const fechar = (evento: KeyboardEvent) => {
-      if (evento.key === 'Escape') setModalFw17(false);
+      if (evento.key === 'Escape') fecharModalFw17();
     };
     window.addEventListener('keydown', fechar);
     return () => window.removeEventListener('keydown', fechar);
-  }, [modalFw17]);
+  }, [modalFw17, fecharModalFw17]);
 
   async function baixarFw17() {
     if (instrumentosFw17.length === 0) return;
@@ -256,7 +264,9 @@ export default function Pagina() {
       ancora.click();
       URL.revokeObjectURL(url);
       setModalFw17(false);
-    } catch {
+    } catch (erro) {
+      // sem isto, falha ao carregar o chunk do exceljs (rede, deploy novo) fica indiagnosticável
+      console.error('Falha ao gerar a planilha FW17:', erro);
       setErroFw17('Não foi possível gerar a planilha. Tente novamente.');
     } finally {
       setGerandoFw17(false);
@@ -532,7 +542,7 @@ export default function Pagina() {
       </main>
 
       {modalFw17 && (
-        <div className="modal-fundo" onClick={() => setModalFw17(false)}>
+        <div className="modal-fundo" onClick={fecharModalFw17}>
           <div
             className="modal"
             role="dialog"
@@ -590,7 +600,7 @@ export default function Pagina() {
             )}
 
             <div className="modal-acoes">
-              <button type="button" className="secundario" onClick={() => setModalFw17(false)}>
+              <button type="button" className="secundario" onClick={fecharModalFw17} disabled={gerandoFw17}>
                 Cancelar
               </button>
               <button
