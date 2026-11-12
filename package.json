@@ -7,9 +7,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "testar": "tsx scripts/testar-parser.ts"
+    "testar": "tsx scripts/testar-parser.ts && tsx scripts/testar-fw17.ts"
   },
   "dependencies": {
+    "exceljs": "^4.4.0",
     "fast-xml-parser": "^4.5.3",
     "fflate": "^0.8.2",
     "next": "^15.5.0",
